@@ -2,7 +2,14 @@ const sendBtn = document.getElementById("send-btn");
 const userInput = document.getElementById("user-input");
 const chatWindow = document.getElementById("chat-window");
 
+// 🌐 Backend URL - auto switch based on environment
+const isLocal = location.hostname === "localhost";
+const BACKEND_URL = isLocal
+  ? "http://localhost:8080/reply"
+  : "https://alter-ego-backend.onrender.com/reply"; // Replace with your actual backend URL once hosted
+
 sendBtn.addEventListener("click", sendMessage);
+
 userInput.addEventListener("keypress", function (e) {
   if (e.key === "Enter" && !e.shiftKey) {
     e.preventDefault();
@@ -20,11 +27,11 @@ function sendMessage() {
   // Show typing animation
   const typingIndicator = document.createElement("div");
   typingIndicator.className = "typing-dots";
-  typingIndicator.textContent = "Alter Ego is typing";
+  typingIndicator.textContent = "Alter Ego is typing...";
   chatWindow.appendChild(typingIndicator);
   chatWindow.scrollTop = chatWindow.scrollHeight;
 
-  fetch("http://localhost:8080/reply", {
+  fetch(BACKEND_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
